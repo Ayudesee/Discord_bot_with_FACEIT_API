@@ -16,11 +16,11 @@ async def player_details(session, nickname=None):
             return None
 
 
-async def player_details_by_id(session, id=None):
+async def player_details_by_id(session, player_id=None):
     api_url = "{}/players".format(base_url)
-    if id is None:
+    if player_id is None:
         return None
-    api_url += f"/{id}"
+    api_url += f"/{player_id}"
     async with session.get(api_url) as res:
         if res.status == 200:
             bin_data = await res.read()

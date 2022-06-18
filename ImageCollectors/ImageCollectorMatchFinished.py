@@ -1,9 +1,12 @@
+import json
+
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import asyncio
 import aiohttp
 from api_funcs.async_faceit_get_funcs import player_details
-from env_variables import faceit_headers
+from decouple import config
+# from env_variables import faceit_headers
 
 
 class ImageCollectorMatchFinished:
@@ -32,7 +35,7 @@ class ImageCollectorMatchFinished:
         tasks = []
         for idx_match, match in enumerate(self.stat_json['rounds']):
             self.draw_map_image(match)
-            async with aiohttp.ClientSession(headers=faceit_headers) as session:
+            async with aiohttp.ClientSession(headers=json.loads(config('faceit_headers'))) as session:
                 for idx_team, team in enumerate(match['teams']):
                     for idx_player, player in enumerate(team['players']):
                         task = asyncio.create_task(

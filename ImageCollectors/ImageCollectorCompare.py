@@ -1,10 +1,13 @@
+import json
+
 from PIL import Image, ImageFont, ImageDraw
 import requests
 import aiohttp
 import asyncio
 from ImageCollectors.ProjectExceptions import NothingException
 from api_funcs.async_faceit_get_funcs import player_details, player_history, match_stats, region_stats
-from env_variables import faceit_headers
+from decouple import config
+# from env_variables import faceit_headers
 
 
 class ImageCollectorCompare:
@@ -37,7 +40,7 @@ class ImageCollectorCompare:
             return int(amount) if amount.isdigit() and 5 <= int(amount) <= 100 else 20
 
     async def collect_image(self):
-        async with aiohttp.ClientSession(headers=faceit_headers) as session:
+        async with aiohttp.ClientSession(headers=json.loads(config('faceit_headers'))) as session:
             task1 = asyncio.create_task(self.collect_stat(session, self.nickname1))
             task2 = asyncio.create_task(self.collect_stat(session, self.nickname2))
 

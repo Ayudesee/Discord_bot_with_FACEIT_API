@@ -1,4 +1,6 @@
 import asyncio
+import json
+
 import aiohttp
 from PIL import Image, ImageFont, ImageDraw
 from datetime import datetime
@@ -6,7 +8,8 @@ import requests
 import calendar
 from api_funcs.async_faceit_get_funcs import player_details, region_stats, player_history, match_stats
 from api_funcs.async_steam_funcs import user_app_stat, user_rec_played_stat
-from env_variables import faceit_headers
+# from env_variables import faceit_headers
+from decouple import config
 
 
 class ImageCollectorStatLast:
@@ -75,7 +78,7 @@ class ImageCollectorStatLast:
 
     async def collect_stat(self, nickname):
         list_of_games = []
-        async with aiohttp.ClientSession(headers=faceit_headers) as session:
+        async with aiohttp.ClientSession(headers=json.loads(config('faceit_headers'))) as session:
             try:
                 task1 = asyncio.create_task(self.get_player_info(session, nickname))
                 pd, history, player_info = await task1

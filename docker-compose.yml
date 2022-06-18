@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: fapi
+    build: .
+    command: uvicorn --app-dir fastAPI main:app
+  bot:
+    container_name: dbot
+    build: .
+    command: python3 discord_bot/main.py
+  rabbit:
+    image: rabbitmq:3-management
+    command: rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp
